@@ -70,6 +70,11 @@ void *get_head(list_t *list) {
 	return list->head->data;
 }
 
+node_t *get_head_node(list_t *list) {
+	assert(list!=NULL && list->head!=NULL);
+	return list->head;
+}
+
 /* =====================================================================
    Program written by Alistair Moffat, as an example for the book
    "Programming, Problem Solving, and Abstraction with C", Pearson

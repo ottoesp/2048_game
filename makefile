@@ -1,17 +1,32 @@
-play_2048: play_2048.o board.o game.o move_graph.o listops.o
-	gcc -o play_2048 play_2048.o board.o game.o move_graph.o listops.o -Wall -g
+# Compiler
+CC = gcc
+# Compiler flags
+CFLAGS = -Wall -Wextra -std=c99
 
-play_2048.o: play_2048.c
-	gcc -c play_2048.c -Wall -g
+# Source files
+SRC_FILES = ai.c board.c game.c listops.c move_graph.c play_2048.c
+# Header files
+HEADER_FILES = ai.h board.h game.h listops.h move_graph.h
 
-board.o: board.c board.h
-	gcc -c board.c -Wall -g
+# Object files
+OBJ_FILES = $(SRC_FILES:.c=.o)
 
-game.o: game.c game.h board.h board.o
-	gcc -c game.c board.c -Wall -g
+# Main executable
+EXECUTABLE = play_2048
 
-move_graph.o: move_graph.c move_graph.h listops.o board.o
-	gcc -c move_graph.c listops.c board.c -Wall -g
+.PHONY: all clean
 
-listops.o: listops.c listops.h
-	gcc -c listops.c -Wall -g
+# Default target
+all: $(EXECUTABLE)
+
+# Rule to compile object files
+%.o: %.c $(HEADER_FILES)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Rule to link object files into executable
+$(EXECUTABLE): $(OBJ_FILES)
+	$(CC) $(CFLAGS) $^ -o $@
+
+# Clean target
+clean:
+	rm -f $(EXECUTABLE) $(OBJ_FILES)

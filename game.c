@@ -14,7 +14,7 @@ void freeGame(Game *game) {
     free(game);
 }
 
-Direction getMove() {
+int getMove() {
     char c;
     while (1) {
         printf("Enter move: ");
@@ -46,7 +46,7 @@ void startGame(Game *game) {
     printf("\n");
 
     while (1) {
-        Direction dir = getMove();
+        int dir = getMove();
         if (swipe(board, dir)) {
             generateTile(board);
         } else {

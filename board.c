@@ -3,7 +3,6 @@
 #include <time.h>
 
 #include "board.h"
-#define FREE -1
 
 typedef struct Board {
     int rows[4][4];
@@ -32,8 +31,13 @@ void printBoard(Board *board) {
     }
 }
 
-void setTile(Board *board, int x, int y, int value) {
+Board* setTile(Board *board, int x, int y, int value) {
     (board->rows)[y][x] = value;
+    return board;
+}
+
+int getTile(Board *board, int x, int y) {
+    return (board->rows)[y][x];
 }
 
 void moveTile(Board *board, int startX, int startY, int destX, int destY) {
@@ -76,7 +80,7 @@ int doCollapse(int *currTile, int currIdx, int *lastTile, int *lastIdx, int *nex
     return hasMoved; 
 }
 
-int swipe(Board *board, Direction dir) { 
+int swipe(Board *board, int dir) { 
     int *currTile, lastIdx, *lastTile, *nextTile, canCollapse;
 
     int hasMoved = 0;
@@ -153,6 +157,27 @@ void generateTile(Board *board) {
     } while ((board->rows)[y][x] != FREE);
 
     (board->rows)[y][x] = (rand() % 10) >= 9 ? 2 : 1;
+}
+
+int cmpBoard(Board *b1, Board *b2) {
+    for (int r = 0; r < 4; r += 1) {
+        for (int c = 0; c < 4; c += 1) {
+            if ((b1->rows)[r][c] != (b2->rows)[r][c]) {
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+
+Board *copyBoard(Board *board) {
+    Board *copy = newBoard();
+    for (int r = 0; r < 4; r += 1) {
+        for (int c = 0; c < 4; c += 1) {
+            (copy->rows)[r][c] = (board->rows)[r][c];
+        }
+    }
+    return copy;
 }
 
 void freeBoard(Board *board) {

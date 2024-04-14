@@ -16,3 +16,4 @@ void free_list(list_t *list);
 list_t *insert_at_head(list_t *list, void *value);
 list_t *insert_at_foot(list_t *list, void *value);
 void *get_head(list_t *list);
+node_t *get_head_node(list_t *list);
