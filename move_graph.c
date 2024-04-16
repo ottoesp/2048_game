@@ -3,49 +3,38 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void setProbablility(Graph *graph, double p);
-void printGraphNode(Graph *graph);
-
-Graph* newGraph(Board *board) {
-    Graph *new = (Graph*)malloc(sizeof(Graph));
+Root* newGraph(Board *board) {
+    Root *new = (Root*)malloc(sizeof(Root));
     assert(new);
 
-    new->probalility = -1;
-    new->board = board;
-    new->visited = 0;
+    new->currentPosition = newPosition(board);
 
-    for (int i = 0; i < 4; i += 1) {
-        new->possiblePositions[i] = make_empty_list();
+    return new;
+}
+
+NewTile* newTile(int x, int y, int value) {
+    NewTile *new = (NewTile*)malloc(sizeof(NewTile));
+    assert(new);
+
+    new->x = x;
+    new->y = y;
+    new->value = value;
+    new->probablility = (value == 1 ? 0.9 : 0.1);
+
+    for (int i = 0; i < 4; i++) {
+        new->swipesTo[i] = NULL;
     }
 
     return new;
 }
 
-void setProbablility(Graph *graph, double p) {
-    graph->probalility = p;
+Position* newPosition(Board* board) {
+    Position *new = (Position*)malloc(sizeof(Position));
+    assert(new);
+
+    new->board = board;
+    new->probablility = 0.0;
+    new->posibleNewTiles = make_empty_list();
+
+    return new;
 }
-
-void printGraphNode(Graph *graph) {
-    node_t *node;
-    Graph *position;
-
-    printf("Position\n");
-    printBoard(graph->board);
-
-    for (int dir = 0; dir < 4; dir += 1) {
-        if (!is_empty_list(graph->possiblePositions[dir])) {
-            node = get_head_node(graph->possiblePositions[dir]);
-            printf("Possible positions for direction %d\n", dir);
-
-            while (node) {
-                position = (Graph*)node->data;
-                printBoard(position->board);
-                printf("\n");
-                node = node->next;
-            }
-        } else {
-            printf("No possible positions for direction %d\n", dir);
-        }
-    }
-}
-

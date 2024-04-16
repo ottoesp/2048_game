@@ -1,14 +1,27 @@
 #include "listops.h"
 #include "board.h"
 
-typedef struct Graph {
-    list_t *possiblePositions[4];
-    Board *board;
-    double probalility;
-    int visited;
-} Graph;
+typedef struct Position Position;
+typedef struct NewTile NewTile;
 
-Graph* newGraph(Board *board);
-void generateChildren(Graph *graph);
-void printGraphNode(Graph *graph);
-void setProbablility(Graph *graph, double p);
+typedef struct Root { // not quite sure if this is what i want it to be
+    Position *currentPosition;
+} Root;
+
+typedef struct NewTile { 
+    int x;
+    int y;
+    int value;
+    double probablility;
+    Position *swipesTo[4];
+} NewTile;
+
+typedef struct Position {
+    Board* board;
+    double probablility;
+    list_t *posibleNewTiles;
+} Position;
+
+Root* newGraph(Board *board);
+NewTile* newTile(int x, int y, int value);
+Position* newPosition(Board* board);
